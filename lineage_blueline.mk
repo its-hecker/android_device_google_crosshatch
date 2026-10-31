@@ -4,6 +4,11 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Initial Android 17 target is a vanilla crDroid build.
+WITH_GMS := false
+WITH_GAPPS := false
+TARGET_FACE_UNLOCK_SUPPORTED := false
+
 # Inherit some common Lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 

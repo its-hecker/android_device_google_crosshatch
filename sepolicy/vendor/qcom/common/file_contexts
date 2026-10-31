@@ -254,3 +254,6 @@
 
 # eSIM
 /sys/firmware/devicetree/base/chosen/cdt/cdb2/esim u:object_r:sysfs_esim:s0
+
+# Android 17 removed the platform label for this legacy allocator.
+/dev/ion    u:object_r:ion_device:s0

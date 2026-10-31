@@ -14,13 +14,22 @@
 # limitations under the License.
 #
 
+TARGET_CHIPSET := sdm845
+
 PRODUCT_SOONG_NAMESPACES += \
     device/google/crosshatch \
     hardware/google/av \
     hardware/google/camera \
     hardware/google/interfaces \
     hardware/google/pixel \
-    hardware/qcom/sdm845 \
+    hardware/google/pixel/health \
+    hardware/google/pixel/pixelstats \
+    hardware/google/pixel/power-libperfmgr \
+    hardware/google/pixel/thermal \
+    hardware/qcom/audio \
+    hardware/qcom/sdm845/display \
+    hardware/qcom/sdm845/gps \
+    hardware/qcom/wlan \
     hardware/qcom/wlan/legacy \
     hardware/qcom-caf/bootctrl \
     vendor/qcom/opensource/data-ipa-cfg-mgr-legacy-um
@@ -60,7 +69,7 @@ endif
 
 LOCAL_PATH := device/google/crosshatch
 SRC_MEDIA_HAL_DIR := hardware/qcom/media/sdm845
-SRC_DISPLAY_HAL_DIR := hardware/qcom/display/sdm845
+SRC_DISPLAY_HAL_DIR := hardware/qcom/sdm845/display
 
 TARGET_PRODUCT_PROP := $(LOCAL_PATH)/product.prop
 
@@ -70,7 +79,9 @@ $(call inherit-product, $(LOCAL_PATH)/utils.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/developer_gsi_keys.mk)
 
 PRODUCT_CHARACTERISTICS := nosdcard
-PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := true
+# The backported 4.9 kernel is not a launch kernel for FCM 7.
+# HAL compatibility is still checked; omit only OTA kernel version/config checks.
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 PRODUCT_SHIPPING_API_LEVEL := 28
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -332,7 +343,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/firmware/wlan/qca_cld/WCNSS_qcom_cfg.ini \
 
 PRODUCT_PACKAGES += \
-    hwcomposer.sdm845 \
+    hwcomposer.qcom \
     android.hardware.graphics.composer@2.3-service \
     gralloc.sdm845 \
     android.hardware.graphics.mapper@2.0-impl-qti-display \
@@ -343,16 +354,13 @@ PRODUCT_PACKAGES += \
     android.hardware.health@2.1-impl-crosshatch \
     android.hardware.health@2.1-service
 
-# Storage health HAL
+# Android 17 uses the AIDL storage health service.
 PRODUCT_PACKAGES += \
-    android.hardware.health.storage@1.0-service
+    android.hardware.health.storage-service.default
 
-# Light HAL
+# The legacy Google HIDL light interface was removed in Android 17.
 PRODUCT_PACKAGES += \
-    lights.qcom \
-    hardware.google.light@1.0-service
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.hardware.lights=qcom
+    android.hardware.light-service.lineage
 
 # Memtrack HAL
 PRODUCT_PACKAGES += \
@@ -618,9 +626,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
   logd.logpersistd.size=30
 endif
 
-# Dumpstate HAL
-PRODUCT_PACKAGES += \
-    android.hardware.dumpstate@1.1-service.crosshatch
+# The retired HIDL dumpstate service is not built on Android 17.
 
 # Storage: for factory reset protection feature
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -788,9 +794,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/thermal_info_config_$(PRODUCT_HARDWARE).json:$(TARGET_COPY_OUT_VENDOR)/etc/thermal_info_config.json \
     $(LOCAL_PATH)/thermal_info_config_$(PRODUCT_HARDWARE)_evt.json:$(TARGET_COPY_OUT_VENDOR)/etc/thermal_info_config_evt.json
 
-# powerstats HAL
-PRODUCT_PACKAGES += \
-    android.hardware.power.stats@1.0-service.pixel
+# The retired HIDL power statistics service is not built on Android 17.
 
 # SurfaceFlinger
 
@@ -817,11 +821,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.vendor.verbose_logging_enabled=false
 endif
 
-# Pixel Logger
-include hardware/google/pixel/PixelLogger/PixelLogger.mk
-
 include hardware/google/pixel/mm/device_legacy.mk
-include device/google/gs-common/thermal/thermal_hal/device.mk
+# Retain thermal protection using the current Pixel thermal HAL.
+PRODUCT_PACKAGES += \
+    android.hardware.thermal-service.pixel \
+    thermal_symlinks
+BOARD_SEPOLICY_DIRS += device/google/crosshatch/sepolicy/vendor/google/thermal_hal
 
 # Citadel
 include hardware/google/pixel/citadel/citadel.mk
@@ -840,3 +845,14 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # Set system properties identifying the chipset
 PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=Qualcomm
 PRODUCT_VENDOR_PROPERTIES += ro.soc.model=SDM845
+
+# The legacy audio HAL now consumes Soong configuration variables.
+$(call soong_config_set,qtiaudio,feature_24bits_camcorder,true)
+$(call soong_config_set,qtiaudio,feature_a2dp_offload,true)
+$(call soong_config_set,qtiaudio,feature_cirrus_spkr_protection,true)
+$(call soong_config_set,qtiaudio,feature_flicker_sensor_input,true)
+$(call soong_config_set,qtiaudio,feature_maxx_audio,true)
+$(call soong_config_set,qtiaudio,feature_multi_voice_sessions,true)
+$(call soong_config_set,qtiaudio,feature_snd_monitor,true)
+$(call soong_config_set,qtiaudio,feature_sound_trigger,true)
+$(call soong_config_set,qtiaudio,feature_usb_tunnel,true)

@@ -56,10 +56,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     chre_daemon_msm
 
-# Configstore
-PRODUCT_PACKAGES += \
-    disable_configstore
-
 # Identity credential
 PRODUCT_PACKAGES += \
     android.hardware.identity_credential.xml
@@ -79,3 +75,6 @@ PRODUCT_PACKAGES += \
 
 # Properties
 TARGET_VENDOR_PROP := $(LOCAL_PATH)/vendor.prop
+
+# Preserve the legacy vendor app labels. Runtime SELinux remains enforcing.
+PRODUCT_ENFORCE_SELINUX_TREBLE_LABELING := false

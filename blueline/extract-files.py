@@ -25,9 +25,13 @@ from extract_utils.main import (
 )
 
 namespace_imports = [
+    'device/google/crosshatch',
     'hardware/google/interfaces',
     'hardware/google/pixel',
-    'hardware/qcom/sdm845',
+    'hardware/google/pixel/health',
+    'hardware/google/pixel/pixelstats',
+    'hardware/qcom/sdm845/display',
+    'hardware/qcom/sdm845/gps',
     'hardware/qcom/wlan/legacy',
 ]
 
@@ -70,6 +74,18 @@ blob_fixups: blob_fixups_user_type = {
         .add_needed('libcrypto_shim.so'),
     'vendor/lib64/hw/com.qti.chi.override.so': blob_fixup()
         .replace_needed('android.hardware.power-V1-ndk_platform.so', 'android.hardware.power-V1-ndk.so'),
+    (
+        'vendor/bin/mm-pp-dpps',
+        'vendor/lib64/hw/camera.sdm845.so',
+        'vendor/lib64/camera/components/com.qti.node.eisv2.so',
+        'vendor/lib64/camera/components/com.qti.node.eisv3.so',
+    ): blob_fixup()
+        .replace_needed('libtinyxml2.so', 'libtinyxml2-v34.so'),
+    'vendor/bin/hw/android.hardware.biometrics.fingerprint@2.1-service.fpc': blob_fixup()
+        .binary_regex_replace(b'_ZN7android10frameworks5stats', b'_ZN7lineage10frameworks5stats')
+        .binary_regex_replace(b'android\\.frameworks\\.stats@1\\.0', b'lineage.frameworks.stats@1.0'),
+    'system_ext/lib64/libsecureuisvc_jni.so': blob_fixup()
+        .add_needed('libgui_shim_secureui.so'),
 }  # fmt: skip
 
 extract_fns: extract_fns_user_type = {

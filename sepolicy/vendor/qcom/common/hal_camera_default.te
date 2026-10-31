@@ -22,7 +22,6 @@ hal_client_domain(hal_camera_default, hal_power)
 hal_client_domain(hal_camera_default, hal_thermal)
 
 # For boot time GPU access (b/111370628)
-hal_client_domain(hal_camera_default, hal_configstore)
 
 allow hal_camera_default proc_stat:file r_file_perms;
 

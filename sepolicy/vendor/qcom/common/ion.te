@@ -1,0 +1,37 @@
+# Android 17 dropped the ION rules from the platform policy and kept only the
+# ion_device type. This kernel has ION and no DMA-BUF heaps, so restore the
+# Android 16 (202504) rules, plus tee (qseecomd), which uses ION for the
+# secure apps. fwk_bufferhub is private to the platform and cannot be named here.
+allow adbd ion_device:chr_file rw_file_perms;
+allow { appdomain -isolated_app_all } ion_device:chr_file r_file_perms;
+allow bootanim ion_device:chr_file rw_file_perms;
+allow bufferhubd ion_device:chr_file r_file_perms;
+allow cameraserver ion_device:chr_file rw_file_perms;
+allow dumpstate ion_device:chr_file r_file_perms;
+allow fingerprintd ion_device:chr_file r_file_perms;
+allow gatekeeperd ion_device:chr_file r_file_perms;
+allow gpuservice ion_device:chr_file r_file_perms;
+allow hal_audio ion_device:chr_file r_file_perms;
+allow hal_authgraph_server ion_device:chr_file r_file_perms;
+allow hal_camera ion_device:chr_file rw_file_perms;
+allow hal_cas ion_device:chr_file rw_file_perms;
+allow hal_codec2_client ion_device:chr_file r_file_perms;
+allow hal_codec2_server ion_device:chr_file r_file_perms;
+allow hal_drm ion_device:chr_file rw_file_perms;
+allow hal_face ion_device:chr_file r_file_perms;
+allow hal_fingerprint ion_device:chr_file r_file_perms;
+allow hal_gatekeeper ion_device:chr_file r_file_perms;
+allow hal_graphics_allocator ion_device:chr_file r_file_perms;
+allow hal_graphics_composer ion_device:chr_file r_file_perms;
+allow hal_keymaster ion_device:chr_file r_file_perms;
+allow { hal_keymint_server -coredomain } ion_device:chr_file r_file_perms;
+allow hal_neuralnetworks_server ion_device:chr_file r_file_perms;
+allow hal_omx_server ion_device:chr_file rw_file_perms;
+allow mediaserver ion_device:chr_file r_file_perms;
+allow rs ion_device:chr_file r_file_perms;
+allow hal_sensors_default ion_device:chr_file r_file_perms;
+allow shell ion_device:chr_file rw_file_perms;
+allow surfaceflinger ion_device:chr_file r_file_perms;
+allow system_server ion_device:chr_file r_file_perms;
+allow tee ion_device:chr_file r_file_perms;
+allow zygote ion_device:chr_file r_file_perms;

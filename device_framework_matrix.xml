@@ -146,14 +146,6 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl" optional="true">
-        <name>hardware.google.light</name>
-        <version>1.0</version>
-        <interface>
-            <name>ILight</name>
-            <instance>default</instance>
-        </interface>
-      </hal>
     <hal format="aidl" optional="true">
         <name>vendor.google.wifi_ext</name>
         <version>1-3</version>
@@ -195,5 +187,21 @@
             <name>IQtiRadio</name>
             <instance>slot1</instance>
         </interface>
+    </hal>
+    <!-- Legacy clients retained for the Pixel 3 vendor implementation. -->
+    <hal format="hidl" optional="true">
+        <name>android.hardware.bluetooth.audio</name>
+        <version>2.0</version>
+        <interface><name>IBluetoothAudioProvidersFactory</name><instance>default</instance></interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>android.hardware.contexthub</name>
+        <version>1.2</version>
+        <interface><name>IContexthub</name><instance>default</instance></interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>android.hardware.health</name>
+        <version>2.1</version>
+        <interface><name>IHealth</name><instance>default</instance></interface>
     </hal>
 </compatibility-matrix>
