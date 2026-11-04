@@ -23,9 +23,6 @@ KERNEL_CROSS_COMPILE := \
 TARGET_KERNEL_SOURCE := kernel/google/msm-4.9
 TARGET_NEEDS_DTBOIMAGE := true
 
-# Manifests
-DEVICE_MANIFEST_FILE += device/google/crosshatch/lineage_manifest.xml
-
 # Partitions
 AB_OTA_PARTITIONS += \
     vendor
