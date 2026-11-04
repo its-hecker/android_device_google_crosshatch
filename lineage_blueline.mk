@@ -29,3 +29,6 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     DeviceProduct=blueline
 
 $(call inherit-product, vendor/google/blueline/blueline-vendor.mk)
+
+# Development USB debugging defaults for the Pixel 3 port.
+include device/google/crosshatch/development/adb.mk
