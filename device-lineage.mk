@@ -49,6 +49,9 @@ PRODUCT_PACKAGES += \
 $(call soong_config_set_bool,livedisplay_sdm,enable_dm,false)
 $(call soong_config_set_bool,livedisplay_sdm,enable_pa,true)
 
+# Keep the legacy graphics mapper available for the SDM845 display HAL.
+$(call soong_config_set_bool,libui,legacy_gralloc,true)
+
 # Parts
 PRODUCT_PACKAGES += \
     GoogleParts
