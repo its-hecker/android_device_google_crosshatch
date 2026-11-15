@@ -254,8 +254,13 @@ on post-fs
     write /sys/module/drm/parameters/vblankoffdelay -1
 
 on post-fs-data
-    # Let the main service class start netd after load-bpf-programs completes.
-    # Starting netd in post-fs-data raced the BPF loader and aborted netd.
+    # netd is explicitly disabled in system/netd/server/netd.rc.
+    # It must not be started here because the BPF loader has not run yet.
+
+# Start the disabled netd service only once its required BPF programs are loaded.
+# Without this action it never starts and framework networking may stall.
+on property:bpf.progs_loaded=1
+    start netd
 
     # b/38048356 Setup debug folders for camera
     mkdir /data/vendor/camera 0770 camera camera
