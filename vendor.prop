@@ -5,5 +5,3 @@ media.mediadrmservice.enable=true
 # Graphics
 ro.hardware.egl=adreno
 ro.hardware.vulkan=adreno
-# Select the shipped Qualcomm HWC2 module in userdebug and eng builds.
-ro.hardware.hwcomposer=qcom
