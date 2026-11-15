@@ -254,8 +254,8 @@ on post-fs
     write /sys/module/drm/parameters/vblankoffdelay -1
 
 on post-fs-data
-    # Do not start netd before the platform BPF loader has pinned its maps
-    # and programs. The normal zygote-start path starts netd after BPF setup.
+    # Let the main service class start netd after load-bpf-programs completes.
+    # Starting netd in post-fs-data raced the BPF loader and aborted netd.
 
     # b/38048356 Setup debug folders for camera
     mkdir /data/vendor/camera 0770 camera camera
