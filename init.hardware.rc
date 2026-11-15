@@ -253,15 +253,12 @@ on post-fs
     # turn off vblank irq immediately after turning off
     write /sys/module/drm/parameters/vblankoffdelay -1
 
-on post-fs-data
-    # netd is explicitly disabled in system/netd/server/netd.rc.
-    # It must not be started here because the BPF loader has not run yet.
-
-# Start the disabled netd service only once its required BPF programs are loaded.
-# Without this action it never starts and framework networking may stall.
+# netd is disabled in system/netd/server/netd.rc and requires an explicit
+# start after the BPF loader is ready. Do not start it during post-fs-data.
 on property:bpf.progs_loaded=1
     start netd
 
+on post-fs-data
     # b/38048356 Setup debug folders for camera
     mkdir /data/vendor/camera 0770 camera camera
 
