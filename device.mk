@@ -262,6 +262,11 @@ PRODUCT_PACKAGES += \
     libmalistener
 
 # graphics
+# Ensure the Qualcomm HWC2 module is selected in generated vendor/build.prop.
+# The vendor.prop-only setting was absent from a failing userdebug image.
+PRODUCT_VENDOR_PROPERTIES += \
+    ro.hardware.hwcomposer=qcom
+
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196610
 
