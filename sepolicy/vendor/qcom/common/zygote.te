@@ -1,6 +1,2 @@
 # Allow the Zygote to read vendor graphics device properties
 get_prop(zygote, vendor_display_prop)
-
-# Android 17 Zygote queries the kernel PID limit while initializing forks.
-# The denial is visible immediately before repeated Zygote crashes.
-allow zygote proc_pid_max:file r_file_perms;
