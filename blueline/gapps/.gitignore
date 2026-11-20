@@ -1,0 +1,2 @@
+# Google proprietary APK and generated configs stay local to the build tree.
+generated/
