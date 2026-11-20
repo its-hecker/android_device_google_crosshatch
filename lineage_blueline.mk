@@ -48,5 +48,10 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 
 $(call inherit-product, vendor/google/blueline/blueline-vendor.mk)
 
+# Core Google services only on the dedicated Pixel 3 GApps branch.
+# The associated manifest syncs MindTheGapps; the build helper extracts GMS
+# from its EROFS-backed APEX as an APK for the 4.9 kernel.
+$(call inherit-product, device/google/crosshatch/blueline/gapps/core-gapps.mk)
+
 # Development USB debugging defaults for the Pixel 3 port.
 include device/google/crosshatch/development/adb.mk
