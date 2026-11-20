@@ -1,0 +1,19 @@
+// Google Play Services compatibility for Pixel 3's Linux 4.9 kernel.
+// Its Android 17 MindTheGapps APEX contains an EROFS payload, so extract the
+// signed APK at build preparation time rather than attempting to mount an APEX.
+// The APK is never checked into this repository.
+
+soong_namespace {}
+
+android_app_import {
+    name: "HeckerGmsCoreCompat",
+    owner: "gapps",
+    apk: "generated/PrebuiltGmsCoreVic.apk",
+    preprocessed: true,
+    presigned: true,
+    privileged: true,
+    product_specific: true,
+    dex_preopt: {
+        enabled: false,
+    },
+}
