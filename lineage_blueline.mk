@@ -48,6 +48,13 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 
 $(call inherit-product, vendor/google/blueline/blueline-vendor.mk)
 
+# On blueline, ro.board.platform=sdm845, but the Qualcomm HWC2 module
+# builds as /vendor/lib64/hw/hwcomposer.qcom.so, not hwcomposer.sdm845.so.
+# Without the explicit hwcomposer variant, the 2.3 composer falls back to
+# gralloc and fails opening the framebuffer (EINVAL), restarting SurfaceFlinger.
+# Restrict this first-boot correction to the experimental GApps branch.
+PRODUCT_VENDOR_PROPERTIES += ro.hardware.hwcomposer=qcom
+
 # Core Google services only on the dedicated Pixel 3 GApps branch.
 # The associated manifest syncs MindTheGapps; the build helper extracts GMS
 # from its EROFS-backed APEX as an APK for the 4.9 kernel.
